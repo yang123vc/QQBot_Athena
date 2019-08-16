@@ -4,6 +4,7 @@ import (
 	"Athena/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"math/rand"
 	"strings"
 )
 
@@ -41,23 +42,30 @@ func ReceiveMahuaOutput(c *gin.Context) {
 		models.SendMsg(pic, guid)
 
 	case "Event":
-		// 接收消息
-		/*
-			// 显示消息内容
-			switch json.EventType {
-			case 1:
-				fmt.Println("好友消息：" + json.FromNum + ":" + json.Message)
-			case 2:
-				fmt.Println("群" + json.FromNum + ":" + json.EventOperator + ":" + json.Message)
-			}
+		msg := models.Msg{json.ReceiverQq, json.EventType, json.FromNum, json.EventOperator}
 
-		*/
+		if json.EventType == 203 {
+			msg.MsgType = 2
+			switch rand.Intn(3) {
+			case 0:
+				models.SendMsg(msg, "虾仁猪心")
+				return
+			case 1:
+				models.SendMsg(msg, "口球带好")
+				return
+			case 2:
+				models.SendMsg(msg, "[Face178.gif][Face67.gif]")
+				return
+			case 3:
+				models.SendMsg(msg, "发言不规范，群员两行泪")
+			}
+		}
+
+		//auto +1
+		models.IfParrot(msg, json.Message)
 
 		if json.EventType == 2 {
-			// 创建 Msg 结构体
-			msg := models.Msg{json.ReceiverQq, json.EventType, json.FromNum, json.EventOperator}
 			switch json.Message {
-
 			case "pixiv":
 				models.Pixiv(msg)
 			case "一张瑟图":
@@ -71,6 +79,10 @@ func ReceiveMahuaOutput(c *gin.Context) {
 			case "ios好友":
 				// 显示ios好友
 				models.GetIOS(msg)
+			case "[IR:at=2325839514] ":
+				models.SendMsg(msg, "/help 查询技能")
+			case "[IR:at=2325839514]":
+				models.SendMsg(msg, "/help 查询技能")
 			default:
 				// 添加内容
 				if len(json.Message) > 13 {
@@ -82,7 +94,8 @@ func ReceiveMahuaOutput(c *gin.Context) {
 							}
 							models.InsertIOS(str[0], str[1])
 						}
-					} else if json.Message[:12] == "添加官服" {
+					}
+					if json.Message[:12] == "添加官服" {
 						if strings.Contains(json.Message[13:], "+") {
 
 							str := strings.Split(json.Message[13:], "+")

@@ -4,13 +4,19 @@ import (
 	"Athena/apis"
 	"Athena/models"
 	"github.com/gin-gonic/gin"
+	"github.com/robfig/cron"
 )
 
 func main() {
+	c := cron.New()
+	// weibo refresh
+	c.AddFunc("0 */10 * * * ?", models.SendWeibo)
 
-	go models.Timer1()
-	go models.Timer2()
-	// Debug
+	// abyss reminding
+	c.AddFunc("0 0 20 ? * 0,3", models.TimerHandler1)
+	//"0 0 20 ? * 0,3"
+	c.Start()
+
 	gin.SetMode(gin.DebugMode)
 
 	router := gin.Default()
