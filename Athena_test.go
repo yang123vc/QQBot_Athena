@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Athena/CleverQQ"
 	"Athena/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -49,4 +50,10 @@ func TestWeibo(t *testing.T) {
 	//models.TestRefresh()
 	models.SendWeibo()
 	//models.WeiboTimer()
+}
+
+func TestTest(t *testing.T) {
+	CleverQQ.CleverQQ_init("47.100.182.193:36524")
+	data := CleverQQ.Data{ResQQ: "2325839514", RecQQ: "752390981"}
+	CleverQQ.PBHomeWork(data, "test_name", "test_topic", "test_content")
 }

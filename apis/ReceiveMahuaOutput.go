@@ -26,6 +26,16 @@ type ReceiveJson struct {
 	TypeCode          string `json:"TypeCode"`
 }
 
+type re struct {
+	//eventType int
+	receiveQQ  string
+	eventAct   string
+	eventObj   string
+	eventFrom  string
+	message    string
+	rawMessage string
+}
+
 func ReceiveMahuaOutput(c *gin.Context) {
 	var json ReceiveJson
 	if err := c.ShouldBindJSON(&json); err != nil {
@@ -111,4 +121,8 @@ func ReceiveMahuaOutput(c *gin.Context) {
 	}
 
 	return
+}
+
+func groupMessage() {
+
 }

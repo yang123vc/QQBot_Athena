@@ -237,10 +237,6 @@ type LongText struct {
 	} `json:"data"`
 }
 
-func TestRefresh() {
-	refresh()
-}
-
 type weiboMsg struct {
 	// -1 for net error
 	// -2 for json error

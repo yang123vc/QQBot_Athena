@@ -1,0 +1,16 @@
+GET http://translate.google.cn/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl=auto&q=我 你
+
+###
+
+POST http://47.100.182.193:36524/api/v1/CleverQQ/Api_PBHomeWork
+Content-Type: application/json
+
+{
+  "响应QQ": "2325839514",
+  "群号": "752390981",
+  "作业名": "HW_test",
+  "标题": "HW_test_topic",
+  "内容": "HW_test_Content"
+}
+
+###
