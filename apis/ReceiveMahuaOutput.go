@@ -2,7 +2,6 @@ package apis
 
 import (
 	"Athena/models"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"math/rand"
 	"strings"
@@ -12,49 +11,40 @@ type ReceiveJson struct {
 	Result            string `json:"Result"`
 	CreateTime        string `json:"CreateTime"`
 	EventAdditionType int    `json:"EventAdditionType"`
-	EventOperator     string `json:"EventOperator"`
-	EventType         int    `json:"EventType"`
-	FromNum           string `json:"FromNum"`
-	JSON              string `json:"Json"`
-	Message           string `json:"Message"`
-	MessageID         string `json:"MessageId"`
-	MessageNum        string `json:"MessageNum"`
-	Platform          int    `json:"Platform"`
-	RawMessage        string `json:"RawMessage"`
-	ReceiverQq        string `json:"ReceiverQq"`
-	Triggee           string `json:"Triggee"`
-	TypeCode          string `json:"TypeCode"`
-}
-
-type re struct {
-	//eventType int
-	receiveQQ  string
-	eventAct   string
-	eventObj   string
-	eventFrom  string
-	message    string
-	rawMessage string
+	// 事件发起者
+	EventOperator string `json:"EventOperator"`
+	// 事件类型
+	EventType int `json:"EventType"`
+	// 事件来源
+	FromNum string `json:"FromNum"`
+	JSON    string `json:"Json"`
+	// 事件内容
+	Message    string `json:"Message"`
+	MessageID  string `json:"MessageId"`
+	MessageNum string `json:"MessageNum"`
+	Platform   int    `json:"Platform"`
+	RawMessage string `json:"RawMessage"`
+	// 响应QQ
+	ReceiverQq string `json:"ReceiverQq"`
+	// 事件响应者
+	Triggee  string `json:"Triggee"`
+	TypeCode string `json:"TypeCode"`
 }
 
 func ReceiveMahuaOutput(c *gin.Context) {
 	var json ReceiveJson
 	if err := c.ShouldBindJSON(&json); err != nil {
-		fmt.Println("json error")
+		// 接收格式错误
+		//fmt.Println("json error")
+		return
 	}
-
 	// 确定事件
 	switch json.TypeCode {
-
-	case "Api_UploadPicApiOut":
-		// 上传图片
-		pic := models.Msg{json.ReceiverQq, json.EventType, json.FromNum, json.EventOperator}
-		guid := json.Result
-		models.SendMsg(pic, guid)
-
 	case "Event":
 		msg := models.Msg{json.ReceiverQq, json.EventType, json.FromNum, json.EventOperator}
 
-		if json.EventType == 203 {
+		switch json.EventType {
+		case 203:
 			msg.MsgType = 2
 			switch rand.Intn(3) {
 			case 0:
@@ -69,12 +59,7 @@ func ReceiveMahuaOutput(c *gin.Context) {
 			case 3:
 				models.SendMsg(msg, "发言不规范，群员两行泪")
 			}
-		}
-
-		//auto +1
-		models.IfParrot(msg, json.Message)
-
-		if json.EventType == 2 {
+		case 2:
 			switch json.Message {
 			case "pixiv":
 				models.Pixiv(msg)
@@ -90,9 +75,9 @@ func ReceiveMahuaOutput(c *gin.Context) {
 				// 显示ios好友
 				models.GetIOS(msg)
 			case "[IR:at=2325839514] ":
-				models.SendMsg(msg, "/help 查询技能")
+				models.SendMsg(msg, "/help 查询技能\nhttps://github.com/Logiase/QQBot_Athena.git")
 			case "[IR:at=2325839514]":
-				models.SendMsg(msg, "/help 查询技能")
+				models.SendMsg(msg, "/help 查询技能\nhttps://github.com/Logiase/QQBot_Athena.git")
 			default:
 				// 添加内容
 				if len(json.Message) > 13 {
@@ -119,10 +104,5 @@ func ReceiveMahuaOutput(c *gin.Context) {
 			}
 		}
 	}
-
 	return
-}
-
-func groupMessage() {
-
 }

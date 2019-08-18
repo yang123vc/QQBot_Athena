@@ -57,3 +57,10 @@ func TestTest(t *testing.T) {
 	data := CleverQQ.Data{ResQQ: "2325839514", RecQQ: "752390981"}
 	CleverQQ.PBHomeWork(data, "test_name", "test_topic", "test_content")
 }
+
+func TestNil(t *testing.T) {
+	data := CleverQQ.Data{}
+	p := &data.MsgType
+	fmt.Println(data.MsgType)
+	fmt.Println(p)
+}

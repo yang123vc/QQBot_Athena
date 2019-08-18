@@ -10,9 +10,12 @@ import (
 var Host string = "localhost:36524"
 
 type Data struct {
-	ResQQ string
-	RecQQ string
-	ObjQQ string
+	ResQQ   string
+	RecQQ   string
+	ActQQ   string
+	ObjQQ   string
+	RecMsg  string
+	MsgType int
 }
 
 const (
@@ -102,19 +105,23 @@ func GetGroupMenberNum(data Data) bool {
 //recQQ 群，讨论组，好友
 //msg 内容
 //boob 气泡
-func SendMsg(data Data, msgType int, msg string, boob int) bool {
+func SendMsg(data Data, msg string, boob int) bool {
 	sendJson := make(map[string]interface{})
 
-	if msgType == 1 || msgType == 0 {
+	if data.MsgType == 0 {
+		data.MsgType = 2
+	}
+
+	if data.MsgType == 1 {
 		sendJson["响应QQ"] = data.ResQQ
-		sendJson["信息类型"] = msgType
+		sendJson["信息类型"] = data.MsgType
 		sendJson["收信对象群_讨论组"] = ""
 		sendJson["收信QQ"] = data.RecQQ
 		sendJson["内容"] = msg
 		sendJson["气泡ID"] = boob
 	} else {
 		sendJson["响应QQ"] = data.ResQQ
-		sendJson["信息类型"] = msgType
+		sendJson["信息类型"] = data.MsgType
 		sendJson["收信对象群_讨论组"] = data.RecQQ
 		sendJson["收信QQ"] = data.RecQQ
 		sendJson["内容"] = msg
