@@ -1,7 +1,7 @@
 package apis
 
 import (
-	"Athena/models"
+	"QQBot_Athena/Athena/models"
 	"github.com/gin-gonic/gin"
 	"math/rand"
 	"strings"

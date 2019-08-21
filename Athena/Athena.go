@@ -1,8 +1,8 @@
 package main
 
 import (
-	"Athena/apis"
-	"Athena/models"
+	"QQBot_Athena/Athena/apis"
+	"QQBot_Athena/Athena/models"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron"
 )

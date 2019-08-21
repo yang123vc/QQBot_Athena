@@ -1,7 +1,7 @@
 package models
 
 import (
-	"Athena/database"
+	"QQBot_Athena/Athena/database"
 	"fmt"
 	"strings"
 )
