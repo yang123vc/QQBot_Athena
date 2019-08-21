@@ -1,32 +1,20 @@
 package models
 
-import (
-	"fmt"
-	"github.com/robfig/cron"
-)
-
-func TimerHandler1() {
+func TimerAbyss() {
 	//547902826
 	data := Msg{"2325839514", 2, "547902826", "547902826"}
-	SendMsg(data, "Athena提醒\n该打深渊啦")
+	SendMsg(data, "Athena提醒\n该打深渊啦\n[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\abyss.jpg]")
 	return
 }
 
-func timerHandler2() {
-	data := Msg{"2325839514", 2, "547902826", "547902826"}
-	SendMsg(data, "Athena提醒\n上线收水晶啦")
+func TimerRefreshSTRanking() {
+	data := Msg{"2325839514", 2, "547902826", "569927585"}
+	GetSTRanking(data)
+
+	for k, _ := range groupRanking {
+		delete(groupRanking, k)
+	}
+
+	SendMsg(data, "统计已清空")
 	return
-}
-
-func TimerTest() {
-	c := cron.New()
-	spec := "*/1 * * * * ?"
-
-	c.AddFunc(spec, func() {
-		fmt.Println("Test ok")
-		return
-	})
-
-	c.Start()
-	select {}
 }

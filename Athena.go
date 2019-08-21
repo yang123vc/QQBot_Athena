@@ -13,8 +13,10 @@ func main() {
 	c.AddFunc("0 */10 * * * ?", models.SendWeibo)
 
 	// abyss reminding
-	c.AddFunc("0 0 20 ? * 0,3", models.TimerHandler1)
-	//"0 0 20 ? * 0,3"
+	c.AddFunc("0 0 20 ? * 0,3", models.TimerAbyss)
+
+	// setu ranking
+	//c.AddFunc("0 0 8 * * ?",models.TimerRefreshSTRanking)
 	c.Start()
 
 	gin.SetMode(gin.DebugMode)
@@ -26,4 +28,8 @@ func main() {
 	// 增删 friends 数据库
 
 	router.Run(":65321")
+}
+
+func Athena_init() {
+
 }

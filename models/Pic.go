@@ -1,12 +1,29 @@
 package models
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 var Flag_pixiv bool = true
 var Flag_One bool = true
 
+var groupRanking = make(map[string]*ranking)
+
+type ranking struct {
+	rank map[string]int
+}
+
 func Pixiv(data Msg) {
 	//msg := "[IR:pic=http://laoliapi.cn/king/tupian/2cykj]"
+	if _, ok := groupRanking[data.MsgFrom]; !ok {
+		groupRanking[data.MsgFrom] = &ranking{}
+	}
+	if _, ok := groupRanking[data.MsgFrom].rank[data.MsgAct]; !ok {
+		groupRanking[data.MsgFrom].rank[data.MsgAct] = 1
+	}
+
+	groupRanking[data.MsgFrom].rank[data.MsgAct] = groupRanking[data.MsgFrom].rank[data.MsgAct] + 1
 	if Flag_pixiv == true {
 		msg := "[IR:pic=https://api.pixivic.com/illust]"
 		SendMsg(data, msg)
@@ -23,19 +40,36 @@ func Pixiv(data Msg) {
 
 func OneSeTu(data Msg) {
 	/*
-		fileName, err := GetWebFile("https://s0.xinger.ink/acgimg/acgurl.php")
-		if err != nil {
-			SendMsg(data, "file error")
-			return
-		}
-		fs, err := ReadFile(fileName)
-		if err != nil {
-			SendMsg(data, "Read error")
-			return
-		}
-		UploadPic(data, fs)
+		if Flag_One == true {
+			msg := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
+			SendMsg(data, msg)
+			timer := time.NewTimer(1 * time.Second)
+			Flag_One = false
+			<-timer.C
+			Flag_One = true
+		} else {
+			msg := ""
+			switch rand.Intn(2) {
+			case 0:
+				msg = "太快啦，Athena受不了的"
+			case 1:
+				msg = "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]"
+			case 2:
+				msg = "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\shark.jpg]"
+			}
 
+			SendMsg(data, msg)
+		}
+		return
 	*/
+	if _, ok := groupRanking[data.MsgFrom]; !ok {
+		groupRanking[data.MsgFrom] = &ranking{make(map[string]int)}
+	}
+	if _, ok := groupRanking[data.MsgFrom].rank[data.MsgAct]; !ok {
+		groupRanking[data.MsgFrom].rank[data.MsgAct] = 0
+	}
+
+	groupRanking[data.MsgFrom].rank[data.MsgAct] = groupRanking[data.MsgFrom].rank[data.MsgAct] + 1
 	msg := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
 	SendMsg(data, msg)
 	return
@@ -45,4 +79,81 @@ func Bing(data Msg) {
 	msg := "[IR:pic=http://laoliapi.cn/king/tupian/biying.php]"
 	SendMsg(data, msg)
 	return
+}
+
+func GetSTList(data Msg) {
+	if _, ok := groupRanking[data.MsgFrom]; !ok {
+		str := "今日本群还没有人要过瑟图哦"
+		str += "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]"
+		SendMsg(data, str)
+		return
+	}
+	str := "今日本群共有" + strconv.Itoa(len(groupRanking[data.MsgFrom].rank)) + "人索要过瑟图，他们是：\n"
+	for k, v := range groupRanking[data.MsgFrom].rank {
+		str += "[IR:at=" + k + "] 共计" + strconv.Itoa(v) + "张\n"
+	}
+	str += "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]"
+	SendMsg(data, str)
+}
+
+func GetSTRanking(data Msg) {
+	if _, ok := groupRanking[data.MsgFrom]; !ok {
+		str := "今日本群还没有人要过瑟图哦"
+		str += "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]"
+		SendMsg(data, str)
+		return
+	}
+	str := "今日本群共有" + strconv.Itoa(len(groupRanking[data.MsgFrom].rank)) + "人索要过瑟图\n"
+
+	type num struct {
+		name string
+		num  int
+	}
+
+	first := num{}
+	second := num{}
+	third := num{}
+
+	for k, v := range groupRanking[data.MsgFrom].rank {
+		if v > third.num {
+			if v > second.num {
+				if v > first.num {
+					third.num = second.num
+					third.name = second.name
+					second.num = first.num
+					second.name = first.name
+					first.num = v
+					first.name = k
+				} else {
+					third.num = second.num
+					third.name = second.name
+					second.num = v
+					second.name = k
+				}
+			} else {
+				third.num = v
+				third.name = k
+			}
+		}
+	}
+
+	if first.name == "" {
+		SendMsg(data, "今天还没有人要过瑟图哦")
+		return
+	}
+	if second.name == "" {
+		SendMsg(data, "今天只有一个人要过瑟图哦\n[IR:at="+first.name+"] 共计"+strconv.Itoa(first.num)+"张"+"[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]")
+		return
+	}
+	if third.name == "" {
+		SendMsg(data, "今天只有两个人要过瑟图哦\n[IR:at="+first.name+"] 共计"+strconv.Itoa(first.num)+"张\n[IR:at="+second.name+"] 共计"+strconv.Itoa(second.num)+"张"+"[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]")
+		return
+	}
+	str += "其中前三名为：\n"
+	str += "1.[IR:at=" + first.name + "] 共计" + strconv.Itoa(first.num) + "张"
+	str += "2.[IR:at=" + second.name + "] 共计" + strconv.Itoa(second.num) + "张"
+	str += "3.[IR:at=" + third.name + "] 共计" + strconv.Itoa(third.num) + "张"
+
+	str += "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]"
+	SendMsg(data, str)
 }

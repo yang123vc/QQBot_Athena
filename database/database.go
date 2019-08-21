@@ -31,6 +31,7 @@ func ConnectDB(dbName string) (db *sql.DB, err error) {
 	return
 }
 
+// 修改中
 func DBInsert(db *sql.DB, table string) (err error) {
 	if db == nil {
 		return errors.New("db Not Found")
