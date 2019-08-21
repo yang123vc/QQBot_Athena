@@ -6,10 +6,13 @@ import (
 	"strings"
 )
 
+// 保持长连接
+var db, err = database.ConnectDB("friends")
+
 // 数据库添加内容
 func insertIOS(name, uid string) {
-	db, err := database.ConnectDB("friends")
-	defer db.Close()
+	//db, err := database.ConnectDB("friends")
+	//defer db.Close()
 	if err != nil {
 		fmt.Print(err)
 		return
@@ -18,8 +21,8 @@ func insertIOS(name, uid string) {
 	return
 }
 func insertAndroid(name, uid string) {
-	db, err := database.ConnectDB("friends")
-	defer db.Close()
+	//db, err := database.ConnectDB("friends")
+	//defer db.Close()
 	if err != nil {
 		fmt.Print(err)
 		return
@@ -30,8 +33,8 @@ func insertAndroid(name, uid string) {
 
 // 数据库获取内容
 func getIOS(data Msg) {
-	db, _ := database.ConnectDB("friends")
-	defer db.Close()
+	//db, _ := database.ConnectDB("friends")
+	//defer db.Close()
 	rows, err := db.Query("SELECT * FROM ios")
 	if err != nil {
 		fmt.Print(err)
@@ -53,12 +56,8 @@ func getIOS(data Msg) {
 	return
 }
 func getAndroid(data Msg) {
-	db, err := database.ConnectDB("friends")
-	if err != nil {
-		fmt.Print(err)
-		return
-	}
-	defer db.Close()
+	//db, err := database.ConnectDB("friends")
+	//defer db.Close()
 	rows, err := db.Query("SELECT * FROM android")
 	if err != nil {
 		fmt.Print(err)
