@@ -132,37 +132,6 @@ func RefreshMasters(data Msg) {
 		SendMsg(data, "你就是我的master吗？")
 	}
 	return
-	/*
-		// 获取群管理
-		sendJson := make(map[string]interface{})
-		sendJson["响应qq"] = data.QQ
-		sendJson["群号"] = data.MsgFrom
-		bytesData, _ := json.Marshal(sendJson)
-		url := "http://47.100.182.193:36524/api/v1/CleverQQ/Api_GetGroupAdmin"
-		req, _ := http.NewRequest("POST", url, bytes.NewReader(bytesData))
-		req.Header.Set("Content-Type", "application/json")
-		client := &http.Client{}
-		resp, _ := client.Do(req)
-		defer resp.Body.Close()
-
-		// 更新自定义
-		path := "txt\\master.txt"
-		menuFile, fileError := os.Open(path)
-		if fileError != nil {
-			SendMsg(data, "列表不存在")
-			return
-		}
-		inputReader := bufio.NewReader(menuFile)
-		for {
-			inputString, inputError := inputReader.ReadString('\n')
-			masterlist = append(masterlist, inputString)
-			if inputError == io.EOF {
-				SendMsg(data, "你就是我的Master吗？")
-				return
-			}
-		}
-
-	*/
 }
 
 func AddMaster(mem []string) {

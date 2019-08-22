@@ -10,7 +10,7 @@ const (
 	// 数据库信息
 	dbUser       string = "root"
 	dbPasswd     string = "syx569927585"
-	dbLoc        string = "tcp(localhost:3306)"
+	dbLoc        string = "tcp(47.100.182.193:3306)"
 	MaxIdleConns int    = 500
 	MaxOpenConns int    = 500
 )

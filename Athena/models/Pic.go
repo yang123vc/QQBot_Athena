@@ -44,45 +44,7 @@ func Pixiv(data Msg) {
 }
 
 func OneSeTu(data Msg) {
-	/*
-		频率限制
-		if Flag_One == true {
-			msg := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
-			SendMsg(data, msg)
-			timer := time.NewTimer(1 * time.Second)
-			Flag_One = false
-			<-timer.C
-			Flag_One = true
-		} else {
-			msg := ""
-			switch rand.Intn(2) {
-			case 0:
-				msg = "太快啦，Athena受不了的"
-			case 1:
-				msg = "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\setu.gif]"
-			case 2:
-				msg = "[IR:pic=C:\\Users\\Administrator\\Desktop\\client\\resource\\shark.jpg]"
-			}
 
-			SendMsg(data, msg)
-		}
-		return
-	*/
-
-	/*
-		计数部分
-		if _, ok := groupRanking[data.MsgFrom]; !ok {
-			groupRanking[data.MsgFrom] = &ranking{make(map[string]int)}
-		}
-		if _, ok := groupRanking[data.MsgFrom].rank[data.MsgAct]; !ok {
-			groupRanking[data.MsgFrom].rank[data.MsgAct] = 0
-		}
-
-		groupRanking[data.MsgFrom].rank[data.MsgAct] = groupRanking[data.MsgFrom].rank[data.MsgAct] + 1
-
-	*/
-	//msg1 := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
-	//msg2 := "[IR:pic=https://sotama.cool/picture]"
 	rand1 := rand.New(rand.NewSource(time.Now().UnixNano()))
 	switch rand1.Intn(7) {
 	case 0:

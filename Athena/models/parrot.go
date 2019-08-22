@@ -7,12 +7,6 @@ type parrotGroup struct {
 	flagParroted bool
 }
 
-// 保存的消息
-//var StrTemp [3]string
-
-// 是否已经复读
-//var FlagParroted bool = false
-
 // 是否复读
 func IfParrot(msg Msg, str string) bool {
 
@@ -35,21 +29,6 @@ func IfParrot(msg Msg, str string) bool {
 		parrotMap[msg.MsgFrom].flagParroted = false
 		return false
 	}
-
-	/*
-		StrTemp[2] = StrTemp[1]
-		StrTemp[1] = StrTemp[0]
-		StrTemp[0] = str
-		if StrTemp[1] == StrTemp[0] {
-			if StrTemp[2] == StrTemp[1] {
-				parrot(msg)
-				FlagParroted = true
-			}
-		} else {
-			FlagParroted = false
-		}
-
-	*/
 }
 
 // 复读

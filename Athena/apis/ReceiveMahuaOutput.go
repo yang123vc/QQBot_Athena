@@ -75,9 +75,7 @@ func ReceiveMahuaOutput(c *gin.Context) {
 			}
 		case 2:
 			// 复读跳过命令判断
-			if models.IfParrot(msg, json.Message) {
-				return
-			}
+			models.IfParrot(msg, json.Message)
 
 			// 命令判断
 			switch json.Message {
