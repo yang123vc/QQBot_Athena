@@ -7,6 +7,13 @@ import (
 	"github.com/robfig/cron"
 )
 
+var message = "又是熟悉的天花板\n" +
+	"时间线收束\n" +
+	"更新内容：\n" +
+	"1.本条消息\n" +
+	"2.优化数据库结构，迁移数据库资料\n" +
+	"3.新功能增加中"
+
 func main() {
 	c := cron.New()
 	// weibo refresh
@@ -30,6 +37,8 @@ func main() {
 	router.Run(":65321")
 }
 
-func Athena_init() {
-
+func init() {
+	data := models.Msg{"2325839514", 2, "547902826", "547902826"}
+	models.GetGM(data)
+	models.SendMsg(data, message)
 }

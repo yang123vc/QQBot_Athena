@@ -1,6 +1,7 @@
 package models
 
 import (
+	"math/rand"
 	"strconv"
 	"time"
 )
@@ -16,14 +17,18 @@ type ranking struct {
 
 func Pixiv(data Msg) {
 	//msg := "[IR:pic=http://laoliapi.cn/king/tupian/2cykj]"
-	if _, ok := groupRanking[data.MsgFrom]; !ok {
-		groupRanking[data.MsgFrom] = &ranking{}
-	}
-	if _, ok := groupRanking[data.MsgFrom].rank[data.MsgAct]; !ok {
-		groupRanking[data.MsgFrom].rank[data.MsgAct] = 1
-	}
+	/*
+		计数部分
+		if _, ok := groupRanking[data.MsgFrom]; !ok {
+			groupRanking[data.MsgFrom] = &ranking{}
+		}
+		if _, ok := groupRanking[data.MsgFrom].rank[data.MsgAct]; !ok {
+			groupRanking[data.MsgFrom].rank[data.MsgAct] = 1
+		}
 
-	groupRanking[data.MsgFrom].rank[data.MsgAct] = groupRanking[data.MsgFrom].rank[data.MsgAct] + 1
+		groupRanking[data.MsgFrom].rank[data.MsgAct] = groupRanking[data.MsgFrom].rank[data.MsgAct] + 1
+
+	*/
 	if Flag_pixiv == true {
 		msg := "[IR:pic=https://api.pixivic.com/illust]"
 		SendMsg(data, msg)
@@ -40,6 +45,7 @@ func Pixiv(data Msg) {
 
 func OneSeTu(data Msg) {
 	/*
+		频率限制
 		if Flag_One == true {
 			msg := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
 			SendMsg(data, msg)
@@ -62,16 +68,56 @@ func OneSeTu(data Msg) {
 		}
 		return
 	*/
-	if _, ok := groupRanking[data.MsgFrom]; !ok {
-		groupRanking[data.MsgFrom] = &ranking{make(map[string]int)}
-	}
-	if _, ok := groupRanking[data.MsgFrom].rank[data.MsgAct]; !ok {
-		groupRanking[data.MsgFrom].rank[data.MsgAct] = 0
-	}
 
-	groupRanking[data.MsgFrom].rank[data.MsgAct] = groupRanking[data.MsgFrom].rank[data.MsgAct] + 1
-	msg := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
-	SendMsg(data, msg)
+	/*
+		计数部分
+		if _, ok := groupRanking[data.MsgFrom]; !ok {
+			groupRanking[data.MsgFrom] = &ranking{make(map[string]int)}
+		}
+		if _, ok := groupRanking[data.MsgFrom].rank[data.MsgAct]; !ok {
+			groupRanking[data.MsgFrom].rank[data.MsgAct] = 0
+		}
+
+		groupRanking[data.MsgFrom].rank[data.MsgAct] = groupRanking[data.MsgFrom].rank[data.MsgAct] + 1
+
+	*/
+	//msg1 := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
+	//msg2 := "[IR:pic=https://sotama.cool/picture]"
+	rand1 := rand.New(rand.NewSource(time.Now().UnixNano()))
+	switch rand1.Intn(7) {
+	case 0:
+		msg := "[IR:pic=https://s0.xinger.ink/acgimg/acgurl.php]"
+		SendMsg(data, "0"+msg)
+		return
+	case 1:
+		msg := "[IR:pic=https://sotama.cool/picture]"
+		SendMsg(data, "1"+msg)
+		return
+	case 2:
+		msg := "[IR:pic=http://www.dmoe.cc/random.php]"
+		SendMsg(data, "2"+msg)
+		return
+	case 3:
+		msg := "[IR:pic=http://laoliapi.cn/king/tupian/2cykj]"
+		SendMsg(data, "3"+msg)
+		return
+	case 4:
+		msg := "[IR:pic=http://acg.bakayun.cn/randbg.php]"
+		SendMsg(data, "4"+msg)
+		return
+	case 5:
+		msg := "[IR:pic=https://acg.toubiec.cn/random]"
+		SendMsg(data, "5"+msg)
+		return
+	case 6:
+		msg := "[IR:pic=http://pic.tsmp4.net/api/erciyuan/img.php]"
+		SendMsg(data, "6"+msg)
+		return
+	case 7:
+		msg := "[IR:pic=http://www.dmoe.cc/random.php]"
+		SendMsg(data, "7"+msg)
+		return
+	}
 	return
 }
 

@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"errors"
+	"time"
 )
 import _ "github.com/go-sql-driver/mysql"
 
@@ -11,8 +11,8 @@ const (
 	dbUser       string = "root"
 	dbPasswd     string = "syx569927585"
 	dbLoc        string = "tcp(localhost:3306)"
-	MaxIdleConns int    = 10
-	MaxOpenConns int    = 10
+	MaxIdleConns int    = 500
+	MaxOpenConns int    = 500
 )
 
 func ConnectDB(dbName string) (db *sql.DB, err error) {
@@ -22,6 +22,7 @@ func ConnectDB(dbName string) (db *sql.DB, err error) {
 	}
 	//defer db.Close()
 
+	db.SetConnMaxLifetime(time.Second * 4)
 	db.SetMaxIdleConns(MaxIdleConns)
 	db.SetMaxOpenConns(MaxOpenConns)
 
@@ -29,15 +30,4 @@ func ConnectDB(dbName string) (db *sql.DB, err error) {
 		return
 	}
 	return
-}
-
-// 修改中
-func DBInsert(db *sql.DB, table string) (err error) {
-	if db == nil {
-		return errors.New("db Not Found")
-	}
-
-	_, err = db.Prepare("INSERT " + "table" + " SET ")
-
-	return nil
 }

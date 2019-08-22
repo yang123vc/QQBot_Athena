@@ -83,3 +83,20 @@ func GetGroupAdmin(data Msg) {
 	defer resp.Body.Close()
 	return
 }
+
+func GetGM(data Msg) {
+	if data.MsgFrom != "547902826" {
+		SendMsg(data, "不支持本群")
+	}
+	sendJson := make(map[string]interface{})
+	sendJson["响应qq"] = data.QQ
+	sendJson["群号"] = data.MsgFrom
+	bytesData, _ := json.Marshal(sendJson)
+	url := "http://47.100.182.193:36524/api/v1/CleverQQ/Api_GetGroupMemberList"
+	req, _ := http.NewRequest("POST", url, bytes.NewReader(bytesData))
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	return
+}

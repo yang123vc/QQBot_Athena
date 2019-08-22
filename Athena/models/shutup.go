@@ -1,13 +1,10 @@
 package models
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -85,34 +82,87 @@ func shutupOne(data Msg, obj string, time int) {
 }
 
 func RefreshMasters(data Msg) {
-	// 获取群管理
-	sendJson := make(map[string]interface{})
-	sendJson["响应qq"] = data.QQ
-	sendJson["群号"] = data.MsgFrom
-	bytesData, _ := json.Marshal(sendJson)
-	url := "http://47.100.182.193:36524/api/v1/CleverQQ/Api_GetGroupAdmin"
-	req, _ := http.NewRequest("POST", url, bytes.NewReader(bytesData))
-	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
-	resp, _ := client.Do(req)
-	defer resp.Body.Close()
-
-	// 更新自定义
-	path := "txt\\master.txt"
-	menuFile, fileError := os.Open(path)
-	if fileError != nil {
-		SendMsg(data, "列表不存在")
-		return
-	}
-	inputReader := bufio.NewReader(menuFile)
-	for {
-		inputString, inputError := inputReader.ReadString('\n')
-		masterlist = append(masterlist, inputString)
-		if inputError == io.EOF {
+	var err error
+	// 从数据库获取管理员
+	for i := 0; i < 2; i++ {
+		rows, err := db.Query("SELECT * FROM `group`.`547902826` WHERE role=?", i)
+		if err != nil {
+			SendMsg(data, "数据库读取错误")
 			return
-			SendMsg(data, "更新成功")
+		}
+
+		for rows.Next() {
+			qq := ""
+			nn := ""
+			sp := 0
+			gs := 0
+			gn := ""
+			uid := ""
+			ro := 0
+			money := 0
+			err = rows.Scan(&qq, &nn, &sp, &gs, &gn, &uid, &ro, &money)
+
+			masterlist = append(masterlist, qq)
 		}
 	}
+
+	// 从数据库获取捐献者
+	rows, err := db.Query("SELECT * FROM `group`.`547902826` WHERE sponsor=?", 1)
+	if err != nil {
+		SendMsg(data, "数据库读取错误")
+		return
+	}
+
+	for rows.Next() {
+		qq := ""
+		nn := ""
+		sp := 0
+		gs := 0
+		gn := ""
+		uid := ""
+		ro := 0
+		money := 0
+		err = rows.Scan(&qq, &nn, &sp, &gs, &gn, &uid, &ro, &money)
+
+		masterlist = append(masterlist, qq)
+	}
+	if err != nil {
+		SendMsg(data, "亻尔京尤是我白勺msarte口马!(数据库错误)")
+	} else {
+		SendMsg(data, "你就是我的master吗？")
+	}
+	return
+	/*
+		// 获取群管理
+		sendJson := make(map[string]interface{})
+		sendJson["响应qq"] = data.QQ
+		sendJson["群号"] = data.MsgFrom
+		bytesData, _ := json.Marshal(sendJson)
+		url := "http://47.100.182.193:36524/api/v1/CleverQQ/Api_GetGroupAdmin"
+		req, _ := http.NewRequest("POST", url, bytes.NewReader(bytesData))
+		req.Header.Set("Content-Type", "application/json")
+		client := &http.Client{}
+		resp, _ := client.Do(req)
+		defer resp.Body.Close()
+
+		// 更新自定义
+		path := "txt\\master.txt"
+		menuFile, fileError := os.Open(path)
+		if fileError != nil {
+			SendMsg(data, "列表不存在")
+			return
+		}
+		inputReader := bufio.NewReader(menuFile)
+		for {
+			inputString, inputError := inputReader.ReadString('\n')
+			masterlist = append(masterlist, inputString)
+			if inputError == io.EOF {
+				SendMsg(data, "你就是我的Master吗？")
+				return
+			}
+		}
+
+	*/
 }
 
 func AddMaster(mem []string) {
