@@ -49,3 +49,8 @@ func TestAppend(t *testing.T) {
 	}
 	fmt.Println(ifRespone)
 }
+
+func TestStr(t *testing.T) {
+	str := "{\"config\":{\"forward\":true,\"type\":\"normal\",\"autosize\":true},\"prompt\":\"[分享]假酒害人 !毛子沙雕时刻 不要笑挑战! 气氛突然苏维埃!\",\"app\":\"com.tencent.structmsg\",\"ver\":\"0.0.0.1\",\"view\":\"news\",\"meta\":{\"news\":{\"title\": \"假酒害人 !毛子沙雕时刻 不要笑挑战! 气氛突然苏维埃!政委..\",\"desc\":\"已观看16.2万次\",\"preview\":\"http:\\/\\/url.cn\\/5MxlHPR\",\"tag\":\"哔哩哔哩\",\"jumpUrl\":\"http:\\/\\/url.cn\\/5goSM5f\",\"appid\":100951776,\"app_type\":1,\"action\":\"\",\"source_url\":\"\",\"source_icon\":\"\",\"android_pkg_name\":\"\"}},\"desc\":\"新闻\"}"
+	fmt.Println(str)
+}

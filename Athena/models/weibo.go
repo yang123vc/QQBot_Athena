@@ -2,10 +2,11 @@ package models
 
 import (
 	"encoding/json"
-	"github.com/robfig/cron"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/robfig/cron"
 )
 
 type Weibo struct {
@@ -241,11 +242,16 @@ type weiboMsg struct {
 	// -1 for net error
 	// -2 for json error
 	// 0 for old
-	ok     int
-	time   string
-	text   string
-	picNum int
-	pics   string
+	ok         int
+	time       string
+	text       string
+	picNum     int
+	pics       string
+	video      bool
+	videoPic   string
+	videoUrl   string
+	videoTitle string
+	videoDesc  string
 }
 
 var newestId string = "nil"
@@ -321,6 +327,12 @@ func refresh() (wm weiboMsg) {
 	}
 	wm.text = str
 
+	if strings.Contains(wm.text, "视频") {
+		wm.video = true
+		wm.videoPic = re.Data.Cards[1].Mblog.PageInfo.PagePic.URL
+		wm.videoUrl = re.Data.Cards[1].Mblog.PageInfo.MediaInfo.Mp4HdURL
+	}
+
 	//editing time
 	wm.time = re.Data.Cards[1].Mblog.CreatedAt
 
@@ -350,6 +362,10 @@ func SendWeibo() {
 	}
 
 	SendMsg(data, str)
+	if wm.video {
+		content := "{\"config\":{\"forward\":true,\"type\":\"normal\",\"autosize\":true},\"prompt\":\"test\",\"app\":\"com.tencent.structmsg\",\"ver\":\"0.0.0.1\",\"view\":\"news\",\"meta\":{\"news\":{\"title\": \"" + wm.videoTitle + "\",\"desc\":\"" + wm.videoDesc + "\",\"preview\":\"" + wm.videoPic + "\",\"tag\":\"Athena\",\"jumpUrl\":\"" + wm.videoUrl + "\",\"appid\":1,\"app_type\":1,\"action\":\"\",\"source_url\":\"\",\"source_icon\":\"\",\"android_pkg_name\":\"com.logiase.top\"}},\"desc\":\"新闻\"}"
+		SendJson(data, content)
+	}
 }
 
 func WeiboTimer() {

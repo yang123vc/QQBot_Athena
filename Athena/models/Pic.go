@@ -64,9 +64,9 @@ func OneSeTu(data Msg) {
 		SendMsg(data, "3"+msg)
 		return
 	case 4:
-		msg := "[IR:pic=http://acg.bakayun.cn/randbg.php]"
-		SendMsg(data, "4"+msg)
-		return
+		//msg := "[IR:pic=http://acg.bakayun.cn/randbg.php]"
+		//SendMsg(data, "4"+msg)
+		fallthrough
 	case 5:
 		msg := "[IR:pic=https://acg.toubiec.cn/random]"
 		SendMsg(data, "5"+msg)

@@ -100,3 +100,27 @@ func GetGM(data Msg) {
 	defer resp.Body.Close()
 	return
 }
+
+func SendJson(data Msg, content string) {
+	sendJson := make(map[string]interface{})
+	sendJson["响应qq"] = data.QQ
+	sendJson["发送方式"] = 1
+	sendJson["信息类型"] = data.MsgType
+	sendJson["收信对象群_讨论组"] = data.MsgFrom
+	sendJson["收信qq"] = data.MsgAct
+	sendJson["json结构"] = content
+
+	bytesData, _ := json.Marshal(sendJson)
+
+	url := "http://47.100.182.193:36524/api/v1/CleverQQ/Api_SendJSON"
+	req, _ := http.NewRequest("POST", url, bytes.NewReader(bytesData))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		fmt.Println("send Failed")
+	}
+	return
+}
