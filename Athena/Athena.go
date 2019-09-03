@@ -7,12 +7,7 @@ import (
 	"github.com/robfig/cron"
 )
 
-var message = "又是熟悉的天花板\n" +
-	"时间线收束\n" +
-	"更新内容：\n" +
-	"1.修改微博转发机制，现在支持视频\n" +
-	"2.去掉了报废的4号图源\n" +
-	"3.征集新功能"
+var message = "又是熟悉的天花板\n"
 
 func main() {
 	c := cron.New()

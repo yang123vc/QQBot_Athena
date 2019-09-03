@@ -46,6 +46,7 @@ func ReceiveMahuaOutput(c *gin.Context) {
 	case "Api_GetGroupMemberListApiOut":
 		getGroupMember(json.Result)
 		data := models.Msg{"2325839514", 2, "547902826", "569927585"}
+		// 反馈信息
 		rand1 := rand.New(rand.NewSource(time.Now().UnixNano()))
 		num := rand1.Float64()/4 + 0.9
 		models.SendMsg(data, "世界线变动率"+strconv.FormatFloat(num, 'f', 7, 64))
@@ -112,6 +113,12 @@ func ReceiveMahuaOutput(c *gin.Context) {
 					models.Shutup(msg, json.Message)
 					return
 				}
+			}
+		case 1:
+			if json.FromNum == "569927585" {
+				return
+			} else {
+				return
 			}
 		}
 	}
