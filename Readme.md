@@ -1,3 +1,4 @@
 ###项目迁移
 
-[QQBot](https://github.com/bh3-hit/QQBot)
+[QQBot_Athena](https://github.com/bh3-hit/QQBot_Athena)
+
